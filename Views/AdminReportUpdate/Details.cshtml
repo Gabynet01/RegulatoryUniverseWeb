@@ -1,0 +1,221 @@
+﻿@model RegulatoryUniverse.Models.MergeReportData
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Main - Regulatory Universe Dashboard";
+    var currentYear = @DateTime.Now.Year;
+
+    var fullName = Context.Session.GetString("fullname");
+    var userRole = Context.Session.GetString("userRole");
+}
+<!--Begin Page Content-->
+<div class="page-content d-flex align-items-stretch">
+    <div class="w3-card-2 w3-white panel default-sidebar">
+        <!-- Begin Side Navbar -->
+        <nav class="side-navbar box-scroll sidebar-scroll">
+            <!-- Begin Main Navigation -->
+            <ul class="list-unstyled">
+
+                <li><a href="/Home"><i class="ti ti-dashboard"></i><span>Dashboard</span></a></li>
+                <li><a href="/ReportUpdate"><i class="ti ti-bell"></i><span>My Updates</span></a></li>
+                @if (userRole.ToUpper() == "ADMINISTRATOR" || userRole.ToUpper() == "COMPLIANCEADMIN")
+                {
+                    <li><a href="/AdminAnalytics"><i class="ti ti-bar-chart"></i><span>Analytics</span></a></li>
+                    <li><a href="/AdminReportUpdate" class="active"><i class="ti ti-alarm-clock"></i><span>Admin Report Updates</span></a></li>
+                    <li>
+                        <a href="#dropdown-tables" aria-expanded="false" data-toggle="collapse"><i class="ti-settings"></i><span>Settings</span></a>
+                        <ul id="dropdown-tables" class="collapse list-unstyled pt-0">
+                            <li><a href="/ReportSchedules">Report Schedules</a></li>
+                            <li><a href="/AdminAppUser">Manage App Users</a></li>
+                            <li><a href="/MailListManager">Manage Mailing List</a></li>
+
+                        </ul>
+                    </li>
+                }
+                <li><a href="https://cbgcomgh.sharepoint.com:443/:f:/s/Compliance/EskAP68scu9LhvslWc_gndkBMrlw1PUVvW6XexoOuIWizQ?e=5%3ahtDkGj&at=9" target="_blank"><i class="ti-anchor"></i><span>Regulatory Laws</span></a></li>
+                <li><a href="#" id="logoutDashBtn"><i class="ion-log-out"></i><span>Log Out</span></a></li>
+
+            </ul>
+
+        </nav>
+        <!-- End Side Navbar -->
+    </div>
+
+    <div class="content-inner">
+        <div class="container-fluid">
+            <div class="give-space"></div>
+
+            <div class="row flex-row">
+
+                <div class="col-md-12">
+
+                    <div class="w3-card-2 w3-white panel widget has-shadow">
+                        <div class="widget-header bordered no-actions w3-light-gray">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h4>Report Details</h4>
+                                </div>
+
+                                <div class="col-2">
+                                    <h4><a asp-action="Index" class="btn btn-danger btn-gradient-01 pull-right m-l-20 waves-effect waves-light"><i class='ti-angle-left'></i> Go Back</a></h4>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="widget-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Report Name</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ReportName)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Status</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.Status)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Receiving Institution</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ReceivingInstitution)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Schedule Frequency</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ScheduleFrequency)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Schedule Frequency Date</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ScheduleFrequencyDate)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Schedule Frequency Time</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ScheduleFrequencyTime)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Description</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.Description)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Applicable Law / Regulation</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ApplicableLawRegulation)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Responsible Department</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ResponsibleDepartment)</span></label>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Created By</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.CreatedBy)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Received Date</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.ReportSentDate)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Acknowledged Receipt</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.AcknowledgeReceipt)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Acknowledged By</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.AcknowledgeBy)</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span>Acknowledged Date</span>
+                                </div>
+                                <div class="col-md-8">
+                                    <label><span>@Html.DisplayFor(model => model.AcknowledgeDate)</span></label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="give-space"></div>
+
+                </div>
+
+            </div>
+            <!-- End Row -->
+            <!-- End Container -->
+            <!-- Begin Page Footer-->
+            <footer class="main-footer fixed-footer">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-start justify-content-lg-start justify-content-md-start justify-content-center">
+                        <p class="text-gradient-02"><b>&copy; @currentYear, Consolidated Bank Ghana</b> | All Rights Reserved</p>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
+
+                    </div>
+                </div>
+            </footer>
+            <!-- End Page Footer -->
+            <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,86 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @*<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">*@
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Consolidated Bank Ghana">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                "families": ["Montserrat:400,500,600,700", "Noto+Sans:400,700"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/img/logo.png">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="~/assets/vendors/css/base/bootstrap.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap-select/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/assets/vendors/css/base/elisyam-1.5.min.css">
+    <link rel="stylesheet" href="~/assets/css/animate/animate.css">
+
+    <!-- FONT AWESOME -->
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/assets/css/custom/loader/red-loader.css">
+    <link rel="stylesheet" href="~/assets/css/custom/w3/w3.css">
+    <link rel="stylesheet" href="~/assets/css/custom/sweetAlert/sweetalert.css">
+    <link rel="stylesheet" href="~/assets/css/app.css">
+    <link rel="stylesheet" href="~/assets/css/custom/toast-master/css/jquery.toast.css">
+</head>
+
+
+<body class="bg-white">
+
+        @RenderBody()
+
+
+    <!-- End Page Content -->
+    <!-- Begin Vendor Js -->
+    <script src="~/assets/vendors/js/base/jquery.min.js"></script>
+
+
+    <!-- End Page Vendor Js -->
+    <!-- Begin Page Snippets -->
+    <!-- Sweet Alert JS -->
+    <script src="~/assets/css/custom/sweetAlert/sweetalert2.min.js"></script>
+
+
+    <!-- BOOSTRAP.JS -->
+    <script src="~/assets/vendors/js/base/core.min.js"></script>
+    <script src="~/assets/vendors/js/bootstrap-select/bootstrap-select.min.js"></script>
+
+    <!--TOAST JS-->
+    <script src="~/assets/css/custom/toast-master/js/jquery.toast.js"></script>
+
+    <!-- Begin Page Vendor Js -->
+    <script src="~/assets/vendors/js/nicescroll/nicescroll.min.js"></script>
+    <script src="~/assets/vendors/js/app/app.min.js"></script>
+    <!-- End Page Vendor Js -->
+
+    <!-- APP.JS -->
+    <script src="~/assets/js/app.js"></script>
+    <script>
+        @*$(document).ready(function () {
+            $("#toggle-btn").click();
+        });*@
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

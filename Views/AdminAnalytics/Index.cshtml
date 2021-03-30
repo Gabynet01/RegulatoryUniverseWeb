@@ -1,0 +1,555 @@
+﻿@model IEnumerable<RegulatoryUniverse.Models.MergeReportData>
+@using Microsoft.AspNetCore.Http;
+
+
+@{
+    ViewData["Title"] = "Main - Regulatory Universe Dashboard";
+    var currentYear = @DateTime.Now.Year;
+
+    var fullName = Context.Session.GetString("fullname");
+    var userRole = Context.Session.GetString("userRole");
+
+}
+<!--Begin Page Content-->
+<div class="page-content d-flex align-items-stretch">
+    <div class="w3-card-2 w3-white panel default-sidebar">
+        <!-- Begin Side Navbar -->
+        <nav class="side-navbar box-scroll sidebar-scroll">
+            <!-- Begin Main Navigation -->
+            <ul class="list-unstyled">
+
+                <li><a href="/Home"><i class="ti ti-dashboard"></i><span>Dashboard</span></a></li>
+                <li><a href="/ReportUpdate"><i class="ti ti-bell"></i><span>My Updates</span></a></li>
+                @if (userRole.ToUpper() == "ADMINISTRATOR" || userRole.ToUpper() == "COMPLIANCEADMIN")
+                {
+                    <li><a href="/AdminAnalytics" class="active"><i class="ti ti-bar-chart"></i><span>Analytics</span></a></li>
+                    <li><a href="/AdminReportUpdate"><i class="ti ti-alarm-clock"></i><span>Admin Report Updates</span></a></li>
+                    <li>
+                        <a href="#dropdown-tables" aria-expanded="false" data-toggle="collapse"><i class="ti-settings"></i><span>Settings</span></a>
+                        <ul id="dropdown-tables" class="collapse list-unstyled pt-0">
+                            <li><a href="/ReportSchedules">Report Schedules</a></li>
+                            <li><a href="/AdminAppUser">Manage App Users</a></li>
+                            <li><a href="/MailListManager">Manage Mailing List</a></li>
+
+                        </ul>
+                    </li>
+                }
+                <li><a href="https://cbgcomgh.sharepoint.com:443/:f:/s/Compliance/EskAP68scu9LhvslWc_gndkBMrlw1PUVvW6XexoOuIWizQ?e=5%3ahtDkGj&at=9" target="_blank"><i class="ti-anchor"></i><span>Regulatory Laws</span></a></li>
+                <li><a href="#" id="logoutDashBtn"><i class="ion-log-out"></i><span>Log Out</span></a></li>
+
+            </ul>
+
+        </nav>
+        <!-- End Side Navbar -->
+    </div>
+
+    <div class="content-inner">
+        <div class="container-fluid">
+            <div class="give-space"></div>
+
+            <div class="row flex-row">
+
+                <div class="col-xl-12 col-md-12" id="analyticsDefault">
+
+                    <div class="w3-card-2 w3-white panel widget has-shadow">
+                        <div class="widget-header bordered no-actions w3-light-gray">
+                            <div class="row">
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow report-schedule-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Report Schedules</div>
+                                                    <div class="number">@ViewData["AllReportScheduleCount"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow report-update-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Updated Reports</div>
+                                                    <div class="number">@ViewData["AllReportsCount"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow pending-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Pending</div>
+                                                    <div class="number">@ViewData["AllPendingCount"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow sent-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Sent</div>
+                                                    <div class="number">@ViewData["AllSentCount"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow acknowledge-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Acknowledged</div>
+                                                    <div class="number">@ViewData["AllAcknowledged"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <h4><a href="#" data-toggle="modal" data-target="#searchAnalyticsModal" class="btn btn-danger btn-gradient-01 pull-right m-l-20 waves-effect waves-light"><i class='ti-search'></i>Click here to Search</a></h4>
+
+                                    <div align="center">
+                                        <h4><a href="/AdminAnalytics" class="rotateRefreshIcon"><i style="color: #fff;" class='ti-reload'></i></a></h4>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+
+                            <div class="row">
+                                <div class="col-xl-6">
+                                    <!-- Doughnut Chart -->
+                                    <div class="widget has-shadow">
+                                        <div class="widget-header bordered no-actions d-flex align-items-center">
+                                            <h4 style="margin-bottom: 28px !important;">Report Status Chart</h4>
+                                        </div>
+                                        <div class="widget-body">
+                                            <div class="chart">
+                                                <canvas id="report-status-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Doughnut Chart -->
+                                </div>
+
+                                <div class="col-xl-6">
+                                    <!-- Doughnut Chart -->
+                                    <div class="widget has-shadow">
+                                        <div class="widget-header bordered no-actions">
+
+                                            <div class="row">
+                                                <div class="col-xl-7">
+                                                    <h4>Report Schedules By Status Chart</h4>
+                                                </div>
+
+                                                <div class="col-xl-5">
+                                                    <div class="form-group">
+                                                        <select class="custom-select-roletype form-control" onchange="getReportScheduleByStatus(this)" style="border: 1px solid #060606; color: #060606;">
+                                                            <option value="acknowledged">Acknowledged</option>
+                                                            <option value="pending">Pending</option>
+                                                            <option value="sent">Sent</option>
+
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="widget-body">
+                                            <div class="chart">
+                                                <canvas id="report-schedule-chart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End Doughnut Chart -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!--Search analytics data-->
+                <div class="col-xl-12 col-md-12" id="searchAnalyticsTable">
+                    <div class="w3-card-2 w3-white panel widget has-shadow">
+                        <div class="widget-header bordered no-actions w3-light-gray">
+                            <div class="row">
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow report-schedule-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Report Schedules</div>
+                                                    <div class="number">@ViewData["AllReportScheduleCount"]</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow report-update-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Updated Reports</div>
+                                                    <div class="number"><span id="updatedReportSearch"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow pending-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Pending</div>
+                                                    <div class="number"><span id="pendingReportSearch"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow sent-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Sent</div>
+                                                    <div class="number"><span id="sentReportSearch"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <div class="w3-card-2 w3-white widget widget-12 has-shadow acknowledge-card">
+                                        <div class="widget-body">
+                                            <div class="media">
+
+                                                <div class="media-body align-self-center" align="center">
+                                                    <div class="title">Acknowledged</div>
+                                                    <div class="number"><span id="acknowledgedReportSearch"></span></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <h4><a href="#" data-toggle="modal" data-target="#searchAnalyticsModal" class="btn btn-danger btn-gradient-01 pull-right m-l-20 waves-effect waves-light"><i class='ti-search'></i>Click here to Search</a></h4>
+
+                                    <div align="center">
+                                        <h4><a href="/AdminAnalytics" class="rotateRefreshIcon"><i style="color: #fff;" class='ti-reload'></i></a></h4>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="widget-body">
+                            <div class="table-responsive">
+                                <table id="appDataTable" class="table mb-0 table-striped table-hover manage-u-table table-css">
+
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                S/N
+                                            </th>
+
+                                            <th>
+                                                Report Name
+                                            </th>
+
+                                            <th>
+                                                Status
+                                            </th>
+
+                                            <th>
+                                                Schedule Frequency
+                                            </th>
+
+                                            <th>
+                                                Schedule Day / Time
+                                            </th>
+
+                                            <th>
+                                                Receiving Institution
+                                            </th>
+
+                                            <th>
+                                                Responsible Department
+                                            </th>
+
+                                            <th>
+                                                Received Date
+                                            </th>
+
+                                            <th>
+                                                Created Date
+                                            </th>
+
+                                            <th>
+                                                Acknowledged
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="populateSearchAnalyticsData">
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                    <!-- End Row -->
+                    <!-- End Container -->
+                    <!-- Begin Page Footer-->
+                    <footer class="main-footer fixed-footer">
+                        <div class="row">
+                            <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-start justify-content-lg-start justify-content-md-start justify-content-center">
+                                <p class="text-gradient-02"><b>&copy; @currentYear, Consolidated Bank Ghana</b> | All Rights Reserved</p>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
+
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End Page Footer -->
+                    <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+
+                    @*Modal starts here*@
+                    <!--search analytics modal-->
+                    <div id="searchAnalyticsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Search here</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group row d-flex align-items-center mb-5">
+
+
+                                            <div class="col-md-6">
+                                                <label class="form-control-label">Select Frequency</label>
+                                                <div class="form-group">
+                                                    <select class="custom-select-roletype form-control schedule_frequency_select_picker" multiple data-actions-box="true" data-live-search="true" id="selectScheduleFrequency" name="selectScheduleFrequency">
+
+                                                        <option value="Daily">Daily</option>
+                                                        <option value="Weekly">Weekly</option>
+                                                        <option value="Monthly">Monthly</option>
+                                                        <option value="Quarterly">Quarterly</option>
+                                                        <option value="HalfYear">Half Year</option>
+                                                        <option value="Annually">Annually</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-control-label">Select Status</label>
+                                                <div class="form-group">
+                                                    <select class="custom-select-roletype form-control report_status_select_picker" multiple data-actions-box="true" data-live-search="true" id="selectReportStatus" name="selectReportStatus">
+
+                                                        <option value="pending">Pending</option>
+                                                        <option value="sent">Sent</option>
+                                                        <option value="acknowledged">Acknowledged</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-control-label">From Date:</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+
+                                                        <input type="text" class="form-control" id="fromReportDateRange" placeholder="Tap to select a date" name="from_date">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="form-control-label">To Date:</label>
+                                                <div class="form-group">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon">
+                                                            <i class="la la-calendar"></i>
+                                                        </span>
+
+                                                        <input type="text" class="form-control" id="toReportDateRange" placeholder="Tap to select date" name="to_date">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                    </form>
+
+                                    <!--Loader and notification messages-->
+                                    <div class="modal_loader" style="display: none;">
+                                        <div align="center" style="margin-bottom:15px;" class="">
+                                            <div class="-spinner-ring -error-"></div>
+                                            <h5><span class="modalAlertPlaceHolder"></span></h5>
+                                        </div>
+                                    </div>
+
+                                    <div align="center">
+                                        <h5><span class="modalAlertPlaceHolder"></span></h5>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-danger btn-gradient-01 waves-effect waves-light" id="searchAnalyticsBtn">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+    </div>
+</div>
+
+
+@*Javascript functions here*@
+<!--append scripts -->
+@section scripts
+{
+
+    <script src="~/assets/js/custom/report_analytics.js"></script>
+
+    <script type="text/javascript">
+        function getReportChartData() {
+            // ------------------------------------------------------- //
+            // Doughnut Chart
+            // ------------------------------------------------------ //
+            var ctx = document.getElementById("report-status-chart").getContext('2d');
+
+            var myChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ["Pending: " +@ViewData["AllPendingCount"], "Sent: " +@ViewData["AllSentCount"], "Acknowledged: " +@ViewData["AllAcknowledged"]],
+                    datasets: [{
+                        label: "Label",
+                        backgroundColor: ["#f6d285", "#08e1ae", "#84fb95"],
+                        hoverBorderColor: ["#fff", "#fff", "#fff"],
+                        borderColor: ["#fff", "#fff", "#fff"],
+                        borderWidth: 10,
+                        data: [@ViewData["AllPendingCount"], @ViewData["AllSentCount"], @ViewData["AllAcknowledged"] ]
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: "#2e3451",
+                            usePointStyle: true,
+                            fontSize: 14
+                        }
+                    },
+                    tooltips: {
+                        backgroundColor: 'rgba(47, 49, 66, 0.8)',
+                        titleFontSize: 14,
+                        titleFontColor: '#fff',
+                        caretSize: 0,
+                        cornerRadius: 4,
+                        xPadding: 10,
+                        displayColors: true,
+                        yPadding: 10,
+                        enabled: false
+                    }
+                }
+            });
+
+
+
+                // ------------------------------------------------------- //
+                // Report Schedule Chart
+                // ------------------------------------------------------ //
+
+            var ctx = document.getElementById("report-schedule-chart").getContext('2d');
+
+            var reportScheduleChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ["Daily: " + @ViewData["reportDailyCount"], "Weekly: " + @ViewData["reportWeeklyCount"], "Monthly: " + @ViewData["reportMonthlyCount"], "Quarterly: " + @ViewData["reportQuarterlyCount"], "HalfYear: " + @ViewData["reportHalfYearCount"], "Annual: " + @ViewData["reportAnnualCount"]],
+                    datasets: [{
+                        label: "Label",
+                        backgroundColor: ["#7d2d94", "#0863a2", "#0d7c43", "#f4b710", "#e73c44", "#f7931e"],
+                        hoverBorderColor: ["#fff", "#fff", "#fff", "#fff", "#fff", "#fff"],
+                        borderColor: ["#fff", "#fff", "#fff", "#fff", "#fff", "#fff"],
+                        borderWidth: 10,
+                        data: [@ViewData["reportDailyCount"], @ViewData["reportWeeklyCount"], @ViewData["reportMonthlyCount"], @ViewData["reportQuarterlyCount"], @ViewData["reportHalfYearCount"],  @ViewData["reportAnnualCount"] ]
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: "#2e3451",
+                            usePointStyle: true,
+                            fontSize: 14
+                        }
+                    },
+                    tooltips: {
+                        backgroundColor: 'rgba(47, 49, 66, 0.8)',
+                        titleFontSize: 14,
+                        titleFontColor: '#fff',
+                        caretSize: 0,
+                        cornerRadius: 4,
+                        xPadding: 10,
+                        displayColors: true,
+                        yPadding: 10,
+                        enabled: false
+                    }
+                }
+            });
+        }
+   
+    </script>
+
+}

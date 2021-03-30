@@ -1,0 +1,245 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    var fullName = Context.Session.GetString("fullname");
+    var userRole = Context.Session.GetString("userRole");
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @*<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">*@
+    <title>@ViewData["Title"] - Regulatory Universe</title>
+    <meta name="description" content="Consolidated Bank Ghana">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                "families": ["Montserrat:400,500,600,700", "Noto+Sans:400,700"]
+            },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="~/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/assets/img/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/assets/img/logo.png">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="~/assets/vendors/css/base/bootstrap.css">
+    <link rel="stylesheet" href="~/assets/css/bootstrap-select/bootstrap-select.min.css">
+    <link rel="stylesheet" href="~/assets/vendors/css/base/elisyam-1.5.min.css">
+    <link rel="stylesheet" href="~/assets/css/animate/animate.css">
+
+    <!-- FONT AWESOME -->
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+
+    <!-- Datatables -->
+    <link rel="stylesheet" href="~/assets/css/datatables/datatables.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/assets/css/custom/loader/red-loader.css">
+    <link rel="stylesheet" href="~/assets/css/custom/w3/w3.css">
+    <link rel="stylesheet" href="~/assets/css/custom/sweetAlert/sweetalert.css">
+    <link rel="stylesheet" href="~/assets/css/app.css">
+    <link rel="stylesheet" href="~/assets/css/custom/toast-master/css/jquery.toast.css">
+</head>
+
+
+<body id="page-top" onload="StartTimers();" onmousemove="ResetTimers();">
+    <!-- Begin Preloader -->
+    <div id="preloader">
+        <div class="canvas">
+            <img src="~/assets/img/logo.png" alt="app-logo" class="loader-logo">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <!-- End Preloader -->
+    <div class="page">
+        <header class="header">
+            <nav class="navbar fixed-top">
+                <!-- Begin Search Box-->
+                <div class="search-box">
+                    <button class="dismiss"><i class="ion-close-round"></i></button>
+                    <form id="searchForm" action="#" role="search">
+                        <input type="search" placeholder="Search something ..." class="form-control">
+                    </form>
+                </div>
+                <!-- End Search Box-->
+                <!-- Begin Topbar -->
+                <div class="navbar-holder d-flex align-items-center align-middle justify-content-between">
+                    <!-- Begin Logo -->
+                    <div class="navbar-header">
+                        <a href="/Home" class="navbar-brand">
+                            <div class="brand-image brand-big">
+                                <img src="~/assets/img/logo.png" alt="CBG_Logo" class="logo-small">
+                                <span>Regulatory Universe</span>
+                            </div>
+                            <div class="brand-image brand-small">
+                                <img src="~/assets/img/logo.png" alt="CBG_Logo" class="logo-small">
+                            </div>
+                        </a>
+                        <!-- Toggle Button -->
+                        <a id="toggle-btn" href="#" class="menu-btn active">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </a>
+                        <!-- End Toggle -->
+                    </div>
+
+                    <!-- Error messages -->
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <p style="color: red; font-size: 16px;">@ViewBag.errorMsg</p>
+                            <!--Loader and notification messages-->
+                            <div class="loader" style="display: none;">
+                                <div align="center" style="margin-bottom:15px;" class="">
+                                    <div class="-spinner-ring -error-"></div>
+                                    <h5><span class="msgAlertPlaceHolder"></span></h5>
+                                </div>
+                            </div>
+
+                            <div align="center">
+                                <h5><span class="msgAlertPlaceHolder"></span></h5>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- End Logo -->
+                    <!-- Begin Navbar Menu -->
+                    <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center pull-right">
+                        <h6 class="page-header-title"><span>@fullName</span></h6>
+                        @*<h6 class="page-header-title"><span id="showUsername"></span></h6>*@
+                        <!-- Search -->
+                        <!-- End Search -->
+                        <!-- Begin Notifications -->
+                        <!-- End Notifications -->
+                        <!-- User -->
+                        <li class="nav-item dropdown">
+                            <a id="user" rel="nofollow" data-target="#" href="#" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false" class="nav-link">
+                                <img src="~/assets/img/avatar/avatar-01.jpg"
+                                     alt="..." class="avatar rounded-circle">
+                            </a>
+                            <ul aria-labelledby="user" class="user-size dropdown-menu">
+                                <li class="welcome">
+                                    <!--   <a href="#" class="edit-profil"><i class="la la-gear"></i></a> -->
+                                    <img src="~/assets/img/avatar/avatar-01.jpg" alt="..." class="rounded-circle">
+                                </li>
+                                @*<li>
+                                        <a href="#" class="dropdown-item">
+                                            Profile
+                                        </a>
+                                    </li>
+                                    <li class="separator"></li>
+                                    <li>
+                                        <a href="#" class="dropdown-item no-padding-bottom">
+                                            Settings
+                                        </a>
+                                    </li>*@
+                                <li class="separator"></li>
+
+                                <li>
+                                    <a href="#" id="logoutBtn" class="dropdown-item no-padding-top">
+                                        Log Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- End User -->
+                        <!-- Begin Quick Actions -->
+                        <!-- End Quick Actions -->
+                    </ul>
+                    <!-- End Navbar Menu -->
+                </div>
+                <!-- End Topbar -->
+            </nav>
+        </header>
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+
+        @*handle timeout pop up modal*@
+        <!--Modal starts here -->
+        <div id="timeoutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-dialog-center modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-body" align="center">
+
+                        <h1>Session About To Timeout</h1>
+                        <p>You will be automatically logged out in 1 minute.                      
+                        <br/>To remain logged in move your mouse over this window.</p>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- End Page Content -->
+    <!-- Begin Vendor Js -->
+    <script src="~/assets/vendors/js/base/jquery.min.js"></script>
+
+    <script src="~/assets/vendors/js/datatables/datatables.min.js"></script>
+    <script src="~/assets/vendors/js/datatables/dataTables.buttons.min.js"></script>
+    <script src="~/assets/vendors/js/datatables/jszip.min.js"></script>
+    <script src="~/assets/vendors/js/datatables/buttons.html5.min.js"></script>
+    <script src="~/assets/vendors/js/datatables/pdfmake.min.js"></script>
+    <script src="~/assets/vendors/js/datatables/vfs_fonts.js"></script>
+    <script src="~/assets/vendors/js/datatables/buttons.print.min.js"></script>
+    <script src="~/assets/vendors/js/nicescroll/nicescroll.min.js"></script>
+    <script src="~/assets/vendors/js/datepicker/moment.min.js"></script>
+    <script src="~/assets/vendors/js/datepicker/daterangepicker.js"></script>
+
+    <!-- End Page Vendor Js -->
+    <!-- Begin Page Snippets -->
+    <!-- <script src="~/assets/js/components/tables/tables.js"></script> -->
+    <!-- Sweet Alert JS -->
+    <script src="~/assets/css/custom/sweetAlert/sweetalert2.min.js"></script>
+
+
+    <!-- BOOSTRAP.JS -->
+    <script src="~/assets/vendors/js/base/core.min.js"></script>
+    <script src="~/assets/vendors/js/bootstrap-select/bootstrap-select.min.js"></script>
+
+    <!--TOAST JS-->
+    <script src="~/assets/css/custom/toast-master/js/jquery.toast.js"></script>
+
+    <!-- Begin Page Vendor Js -->
+    <script src="~/assets/vendors/js/nicescroll/nicescroll.min.js"></script>
+    <script src="~/assets/vendors/js/chart/chart.min.js"></script>
+    <script src="~/assets/vendors/js/app/app.min.js"></script>
+    <!-- End Page Vendor Js -->
+    <!-- Begin Page Snippets -->
+    <script src="~/assets/js/components/cryptojs/crypto-js.min.js"></script>
+    <!-- APP.JS -->
+    <script src="~/assets/js/app.js"></script>
+    <script>
+        @*$(document).ready(function () {
+            $("#toggle-btn").click();
+        });*@
+
+    </script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,325 @@
+﻿@model RegulatoryUniverse.Models.ReportSchedule
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Main - Regulatory Universe Dashboard";
+    var currentYear = @DateTime.Now.Year;
+
+    var fullName = Context.Session.GetString("fullname");
+    var userRole = Context.Session.GetString("userRole");
+    var username = Context.Session.GetString("username");
+    var currentDate = @DateTime.Now;
+}
+<!--Begin Page Content-->
+<div class="page-content d-flex align-items-stretch">
+    <div class="w3-card-2 w3-white panel default-sidebar">
+        <!-- Begin Side Navbar -->
+        <nav class="side-navbar box-scroll sidebar-scroll">
+            <!-- Begin Main Navigation -->
+            <ul class="list-unstyled">
+
+                <li><a href="/Home"><i class="ti ti-dashboard"></i><span>Dashboard</span></a></li>
+                <li><a href="/ReportUpdate"><i class="ti ti-bell"></i><span>My Updates</span></a></li>
+                @if (userRole.ToUpper() == "ADMINISTRATOR" || userRole.ToUpper() == "COMPLIANCEADMIN")
+                {
+                    <li><a href="/AdminAnalytics"><i class="ti ti-bar-chart"></i><span>Analytics</span></a></li>
+                    <li><a href="/AdminReportUpdate"><i class="ti ti-alarm-clock"></i><span>Admin Report Updates</span></a></li>
+                    <li>
+                        <a href="#dropdown-tables" class="active" aria-expanded="true" data-toggle="collapse"><i class="ti-settings"></i><span>Settings</span></a>
+                        <ul id="dropdown-tables" class="collapse list-unstyled show pt-0">
+                            <li><a class="sub_active" href="/ReportSchedules">Report Schedules</a></li>
+                            <li><a href="/AdminAppUser">Manage App Users</a></li>
+                            <li><a href="/MailListManager">Manage Mailing List</a></li>
+
+                        </ul>
+                    </li>
+                }
+                <li><a href="https://cbgcomgh.sharepoint.com:443/:f:/s/Compliance/EskAP68scu9LhvslWc_gndkBMrlw1PUVvW6XexoOuIWizQ?e=5%3ahtDkGj&at=9" target="_blank"><i class="ti-anchor"></i><span>Regulatory Laws</span></a></li>
+                <li><a href="#" id="logoutDashBtn"><i class="ion-log-out"></i><span>Log Out</span></a></li>
+
+            </ul>
+
+        </nav>
+        <!-- End Side Navbar -->
+    </div>
+
+    <div class="content-inner">
+        <div class="container-fluid">
+            <div class="give-space"></div>
+
+            <div class="row flex-row">
+
+                <div class="col-md-12">
+
+                    <div class="w3-card-2 w3-white panel widget has-shadow">
+                        <div class="widget-header bordered no-actions w3-light-gray">
+                            <div class="row">
+                                <div class="col-10">
+                                    <h4>Edit Report</h4>
+                                </div>
+
+                                <div class="col-2">
+                                    <h4><a asp-action="Index" class="btn btn-danger outline-btn pull-right m-l-20 waves-effect waves-light"><i style="color: #000;" class='ti-angle-left'></i> Go Back</a></h4>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="widget-body">
+
+                            <form asp-action="Edit" id="reportScheduleDiv">
+                                <div class="form-group row">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <input type="hidden" asp-for="Id" />
+                                    <div class="col-6">
+                                        <label asp-for="ReportName" class="form-control-label">Report Name</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-receipt"></i>
+                                                </span>
+                                                <input asp-for="ReportName" type="text" class="form-control" placeholder="Report Name">
+                                                <span asp-validation-for="ReportName" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label asp-for="ReceivingInstitution" class="form-control-label">Receiving Institution</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-world"></i>
+                                                </span>
+                                                <input asp-for="ReceivingInstitution" type="text" class="form-control" placeholder="Receiving Institution">
+                                                <span asp-validation-for="ReceivingInstitution" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-6">
+                                        <label asp-for="Description" class="form-control-label">Description</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-agenda"></i>
+                                                </span>
+                                                <textarea asp-for="Description" class="form-control" placeholder="Description" rows="2"> </textarea>
+                                                <span asp-validation-for="Description" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label asp-for="ApplicableLawRegulation" class="form-control-label">Applicable Law / Regulation</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-stamp"></i>
+                                                </span>
+                                                <textarea asp-for="ApplicableLawRegulation" type="text" class="form-control" placeholder="Applicable Law / Regulation" rows="2"></textarea>
+                                                <span asp-validation-for="ApplicableLawRegulation" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-6">
+                                        <label asp-for="ScheduleFrequency" class="form-control-label">Schedule Frequency</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-alarm-clock"></i>
+                                                </span>
+                                                <select asp-for="ScheduleFrequency" class="form-control" id="ScheduleFrequency" onchange="showScheduleDateField(this)">
+                                                    <option value="">Please select one</option>
+                                                    <option value="Daily">Daily</option>
+                                                    <option value="Weekly">Weekly</option>
+                                                    <option value="Monthly">Monthly</option>
+                                                    <option value="Quarterly">Quarterly</option>
+                                                    <option value="HalfYear">Half Year</option>
+                                                    <option value="Annually">Annually</option>
+                                                </select>
+                                                <span asp-validation-for="ScheduleFrequency" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6" id="selectedScheduleDateInput">
+                                        <label asp-for="ScheduleFrequencyDate" class="form-control-label"><span id="showPlaceHolderText"></span></label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-calendar"></i>
+                                                </span>
+
+                                                <input asp-for="ScheduleFrequencyDate" type="text" class="form-control" id="reportScheduleDateRange">
+                                                <span asp-validation-for="ScheduleFrequencyDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <label asp-for="ScheduleFrequencyTime" class="form-control-label"><span id="showPlaceHolderTimeText"></span></label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-alarm-clock"></i>
+                                                </span>
+
+                                                <input asp-for="ScheduleFrequencyTime" type="text" class="form-control" id="reportScheduleTimeRange">
+                                                <span asp-validation-for="ScheduleFrequencyTime" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label asp-for="ResponsibleDepartment" class="form-control-label">Responsible Department</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-pin2"></i>
+                                                </span>
+                                                <input asp-for="ResponsibleDepartment" type="text" class="form-control" placeholder="Responsible Department">
+                                                <span asp-validation-for="ResponsibleDepartment" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <label asp-for="AssignedEmails" class="form-control-label">Assigned Emails <i rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Click on the text box below' class="ti-info-alt"></i></label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-email"></i>
+                                                </span>
+                                                <textarea asp-for="AssignedEmails" class="form-control" name="AssignedEmails" placeholder="Assigned Emails" id="editAssignedEmailsDiv" rows="4"> </textarea>
+                                                <span asp-validation-for="AssignedEmails" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6" style="display:none;">
+                                        <label asp-for="CreatedBy" class="form-control-label">Created By</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-id-badge"></i>
+                                                </span>
+                                                <input asp-for="CreatedBy" type="text" value=@username class="form-control" placeholder="Created By">
+                                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6" style="display:none;">
+                                        <label asp-for="CreatedDate" class="form-control-label">Created By</label>
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="ti-id-badge"></i>
+                                                </span>
+                                                <input asp-for="CreatedDate" type="text" class="form-control" placeholder="Created Date">
+                                                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12" align="center">
+                                        <br />
+                                        <button type="submit" id="submitReportBtn" value="Save" class="btn btn-danger btn-gradient-01 waves-effect waves-light showLoaderBtn">Submit</button>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="give-space"></div>
+
+                </div>
+
+            </div>
+            <!-- End Row -->
+            <!-- End Container -->
+            <!--Modal starts here -->
+            <div id="assignedEmailsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Assign Emails Below:</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group row multiple-form-group d-flex align-items-center mb-5">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+
+                                            <div class="field_wrapper_edit" id="editAssignedEmailsInput"></div>
+
+                                            <div id="result_sup" class="list-group"></div>
+
+                                            <div class="static_field_wrapper">
+                                                <input type="text" placeholder="Click on the plus icon to add Email Address" disabled><a href="javascript:void(0);" class="add_button_edit" title="Add new field">&nbsp;&nbsp;<span><i class="ti-plus"></i></span></a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </form>
+
+                            <!--Loader and notification messages-->
+                            <div class="modal_loader" style="display: none;">
+                                <div align="center" style="margin-bottom:15px;" class="">
+                                    <div class="-spinner-ring -error-"></div>
+                                    <h5><span class="modalAlertPlaceHolder"></span></h5>
+                                </div>
+                            </div>
+
+                            <div align="center">
+                                <h5><span class="modalAlertPlaceHolder"></span></h5>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger btn-gradient-01 waves-effect waves-light" id="addModalEmailsBtn">Add All</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Begin Page Footer-->
+            <footer class="main-footer fixed-footer">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-start justify-content-lg-start justify-content-md-start justify-content-center">
+                        <p class="text-gradient-02"><b>&copy; @currentYear, Consolidated Bank Ghana</b> | All Rights Reserved</p>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
+
+                    </div>
+                </div>
+            </footer>
+            <!-- End Page Footer -->
+            <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+
+        </div>
+
+    </div>
+</div>
+
+
+@*Javascript functions here*@
+<!--append scripts -->
+@section scripts
+{
+
+    <script src="~/assets/js/custom/report_schedule.js"></script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

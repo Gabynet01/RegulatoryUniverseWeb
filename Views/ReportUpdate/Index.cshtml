@@ -1,0 +1,279 @@
+﻿@model IEnumerable<RegulatoryUniverse.Models.MergeReportData>
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "Main - Regulatory Universe Dashboard";
+    var currentYear = @DateTime.Now.Year;
+
+    var fullName = Context.Session.GetString("fullname");
+    var userRole = Context.Session.GetString("userRole");
+
+}
+<!--Begin Page Content-->
+<div class="page-content d-flex align-items-stretch">
+    <div class="w3-card-2 w3-white panel default-sidebar">
+        <!-- Begin Side Navbar -->
+        <nav class="side-navbar box-scroll sidebar-scroll">
+            <!-- Begin Main Navigation -->
+            <ul class="list-unstyled">
+
+                <li><a href="/Home"><i class="ti ti-dashboard"></i><span>Dashboard</span></a></li>
+                <li><a href="/ReportUpdate" class="active"><i class="ti ti-bell"></i><span>My Updates</span></a></li>
+                @if (userRole.ToUpper() == "ADMINISTRATOR" || userRole.ToUpper() == "COMPLIANCEADMIN")
+                {
+                <li><a href="/AdminAnalytics"><i class="ti ti-bar-chart"></i><span>Analytics</span></a></li>
+                <li><a href="/AdminReportUpdate"><i class="ti ti-alarm-clock"></i><span>Admin Report Updates</span></a></li>
+                <li>
+                    <a href="#dropdown-tables" aria-expanded="false" data-toggle="collapse"><i class="ti-settings"></i><span>Settings</span></a>
+                    <ul id="dropdown-tables" class="collapse list-unstyled pt-0">
+                        <li><a href="/ReportSchedules">Report Schedules</a></li>
+                        <li><a href="/AdminAppUser">Manage App Users</a></li>
+                        <li><a href="/MailListManager">Manage Mailing List</a></li>
+
+                    </ul>
+                </li>
+                }
+                <li><a href="https://cbgcomgh.sharepoint.com:443/:f:/s/Compliance/EskAP68scu9LhvslWc_gndkBMrlw1PUVvW6XexoOuIWizQ?e=5%3ahtDkGj&at=9" target="_blank"><i class="ti-anchor"></i><span>Regulatory Laws</span></a></li>
+                <li><a href="#" id="logoutDashBtn"><i class="ion-log-out"></i><span>Log Out</span></a></li>
+
+            </ul>
+
+        </nav>
+        <!-- End Side Navbar -->
+    </div>
+
+    <div class="content-inner">
+        <div class="container-fluid">
+            <div class="give-space"></div>
+
+            <div class="row flex-row">
+
+                <div class="col-md-12">
+
+                    <div class="w3-card-2 w3-white panel widget has-shadow">
+                        <div class="widget-header bordered no-actions w3-light-gray">
+                            <div class="row">
+                                <div class="col-xl-4 col-md-6 col-sm-6">
+                                    <h4>My Updated Reports</h4>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <a href="#" id="allReportCard" style="display: block !important;">
+                                        <div class="w3-card-2 w3-white widget widget-12 has-shadow all-card">
+                                            <div class="widget-body">
+                                                <div class="media">
+
+                                                    <div class="media-body align-self-center" align="center">
+                                                        <div class="title">All Reports</div>
+                                                        <div class="number">@ViewData["AllReportsCount"]</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <a href="#" id="pendingCard" style="display: block !important;">
+                                        <div class="w3-card-2 w3-white widget widget-12 has-shadow pending-card">
+                                            <div class="widget-body">
+                                                <div class="media">
+
+                                                    <div class="media-body align-self-center" align="center">
+                                                        <div class="title">Pending</div>
+                                                        <div class="number">@ViewData["AllPendingCount"]</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <a href="#" id="sentCard" style="display: block !important;">
+                                        <div class="w3-card-2 w3-white widget widget-12 has-shadow sent-card">
+                                            <div class="widget-body">
+                                                <div class="media">
+
+                                                    <div class="media-body align-self-center" align="center">
+                                                        <div class="title">Sent</div>
+                                                        <div class="number">@ViewData["AllSentCount"]</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                                <div class="col-xl-2 col-md-6 col-sm-6">
+                                    <a href="#" id="acknowledgeCard" style="display: block !important;">
+                                        <div class="w3-card-2 w3-white widget widget-12 has-shadow acknowledge-card">
+                                            <div class="widget-body">
+                                                <div class="media">
+
+                                                    <div class="media-body align-self-center" align="center">
+                                                        <div class="title">Acknowledged</div>
+                                                        <div class="number">@ViewData["AllAcknowledged"]</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="widget-body">
+
+                            <div class="table-responsive">
+                                <table id="appDataTable" class="table mb-0 table-striped table-hover manage-u-table table-css">
+
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                Report Name
+                                            </th>
+
+                                            <th>
+                                                Status
+                                            </th>
+
+                                            <th>
+                                                Schedule Frequency
+                                            </th>
+
+                                            <th>
+                                                Schedule Day / Time
+                                            </th>
+
+                                            @*<th>
+                                                    Description
+                                                </th>*@
+
+                                            @*<th>
+                                                    Applicable Regulation
+                                                </th>*@
+
+                                            <th>
+                                                Receiving Institution
+                                            </th>
+
+                                            <th>
+                                                Responsible Department
+                                            </th>
+
+                                            <th>
+                                                Received Date
+                                            </th>
+
+                                            <th>
+                                                Created Date
+                                            </th>
+
+                                            <th>
+                                                Acknowledged
+                                            </th>
+
+
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ReportName)
+                                                </td>
+                                                <td>
+                                                    @item.Status.ToUpper()
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ScheduleFrequency)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ScheduleFrequencyDate) / <b>@Html.DisplayFor(modelItem => item.ScheduleFrequencyTime)</b>
+                                                </td>
+
+                                                @*<td>
+                                                        @Html.DisplayFor(modelItem => item.Description)
+                                                    </td>*@
+                                                @*<td>
+                                                        @Html.DisplayFor(modelItem => item.ApplicableLawRegulation)
+                                                    </td>*@
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ReceivingInstitution)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ResponsibleDepartment)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ReportSentDate)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CreatedDate)
+                                                </td>
+
+                                                <td>
+                                                    @item.AcknowledgeReceipt.ToUpper()
+                                                </td>
+
+
+                                                <td class="td-actions" width="11%">
+                                                    @if (item.Status.ToUpper() == "PENDING")
+                                                    {
+                                                        <a href="#" data-update-report-edit='{"id": "@item.Id", "reportId": "@item.ReportId"}' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Edit'><i class='ti-pencil'></i></a>
+                                                    }
+                                                    <a asp-action="Details" asp-route-id="@item.Id" rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Show Details'><i class='ti-more'></i></a>
+                                                    @*<a href="#" data-delete-id='@item.Id' rel='tooltip' data-toggle='tooltip' data-placement='bottom' title='Delete'><i class='ti-close'></i></a>*@
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- End Row -->
+            <!-- End Container -->
+            <!-- Begin Page Footer-->
+            <footer class="main-footer fixed-footer">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-start justify-content-lg-start justify-content-md-start justify-content-center">
+                        <p class="text-gradient-02"><b>&copy; @currentYear, Consolidated Bank Ghana</b> | All Rights Reserved</p>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-6 col-sm-12 d-flex align-items-center justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-center">
+
+                    </div>
+                </div>
+            </footer>
+            <!-- End Page Footer -->
+            <a href="#" class="go-top"><i class="la la-arrow-up"></i></a>
+
+        </div>
+
+    </div>
+</div>
+
+
+@*Javascript functions here*@
+<!--append scripts -->
+@section scripts
+{
+
+    <script src="~/assets/js/custom/report_update.js"></script>
+
+}
