@@ -1,7 +1,22 @@
 ﻿$(document).ready(function () {
    
     //initiate datatables and order descending
-    var table = $('#appDataTable').DataTable();
+    $('#appDataTable').dataTable({
+        "bDestroy": true
+    }).fnDestroy();
+
+    //initiate datatables and order descending
+    var table = $('#appDataTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            'copy', 'csv', 'excel', 'print'
+        ]
+    });
 
     table.order([7, 'desc']).draw();
 

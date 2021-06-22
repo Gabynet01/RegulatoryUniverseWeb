@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Http;
 
 @{
-    ViewData["Title"] = "Main - Regulatory Universe Dashboard Mail List Manager";
+    ViewData["Title"] = "Mail List - Regulatory Universe Dashboard";
     var currentYear = @DateTime.Now.Year;
 
     var fullName = Context.Session.GetString("fullname");
@@ -58,7 +58,7 @@
                         <div class="widget-header bordered no-actions w3-light-gray">
                             <div class="row">
                                 <div class="col-10">
-                                    <h4>Create a New Report</h4>
+                                    <h4>Create a New Mail List</h4>
                                 </div>
 
                                 <div class="col-2">

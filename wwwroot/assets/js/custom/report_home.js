@@ -1,10 +1,42 @@
 ﻿$(document).ready(function () {
     //initiate datatables and order descending
-    var table = $('#appDataTable').DataTable();
+    //initiate datatables and order descending
+    $('#appDataTable').dataTable({
+        "bDestroy": true
+    }).fnDestroy();
+
+    //initiate datatables and order descending
+    var table = $('#appDataTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'LEGAL'
+            },
+            'copy', 'csv', 'excel', 'print'
+        ]
+    });
 });
 
 //lets handle clicks of each cards
-var table = $('#appDataTable').DataTable();
+//initiate datatables and order descending
+$('#appDataTable').dataTable({
+    "bDestroy": true
+}).fnDestroy();
+
+//initiate datatables and order descending
+var table = $('#appDataTable').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        {
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+        },
+        'copy', 'csv', 'excel', 'print'
+    ]
+});
 
 $('#dailyCard').on('click', function () {
     table.columns(2).search("daily").draw();

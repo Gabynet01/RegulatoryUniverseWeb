@@ -296,6 +296,11 @@ $("#searchAnalyticsBtn").click(function (e) {
                 $('#appDataTable').DataTable({
                     dom: 'Bfrtip',
                     buttons: [
+                        {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'LEGAL'
+                        },
                         'copy', 'csv', 'excel', 'print'
                     ]
                 });

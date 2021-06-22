@@ -119,7 +119,7 @@ namespace RegulatoryUniverse.Controllers
 
                     var userRoleName = Roles.Name;
 
-                    using (var adcontext = new PrincipalContext(ContextType.Domain, "cbg", "DC=cbg,DC=com"))
+                    using (var adcontext = new PrincipalContext(ContextType.Domain, "172.28.254.21", "DC=cbg,DC=com"))
                     {
                         if (adcontext.ValidateCredentials(formUsername, formPassword))
                         {

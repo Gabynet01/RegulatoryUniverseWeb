@@ -458,10 +458,13 @@ nav.navbar .dropdown-menu a {
 
 
 /** FOOTER **/
+.main-footer {
+    background-color: #F9F9F9 !important;
+}
 
 .text-gradient-02 {
     background: #313131;
-    background: linear-gradient(to right, #e20d1c, #060606);
+    /*    background: #FFF;*/
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-align: center;
